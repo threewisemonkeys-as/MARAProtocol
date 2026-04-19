@@ -8,3 +8,8 @@ log_environment_interfaces*
 AutumnBenchmark
 log
 python_examples/autumnbench/example_benchmark/*
+
+# Local-build artifacts (platform-specific binaries and pip editable install)
+python_examples/autumnbench/interpreter_module.cpython-*linux*.so
+*.egg-info/
+uv.lock

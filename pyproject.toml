@@ -1,0 +1,26 @@
+[project]
+name = "maraprotocol"
+version = "0.0.0"
+description = "MARAProtocol + AutumnBench (local editable install for bai)"
+requires-python = ">=3.11"
+dependencies = [
+    "grpcio",
+    "protobuf",
+    "pyyaml",
+    "numpy",
+    "matplotlib",
+]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["python_examples*", "generated*"]
+
+[tool.setuptools.package-data]
+"python_examples.autumnbench" = ["*.so", "example_benchmark/**/*"]
