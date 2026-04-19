@@ -13,3 +13,5 @@ python_examples/autumnbench/example_benchmark/*
 python_examples/autumnbench/interpreter_module.cpython-*linux*.so
 *.egg-info/
 uv.lock
+
+*.so
