@@ -175,6 +175,11 @@ class InteractiveEnvironment:
 
         return f"""Welcome, you are now in the interactive phase, where you can interact with the grid using the available actions.
 During the interactive phase your goal is to act in the environment to understand the underlying rules of the environment. You can reset the environment to it's initial state at any time.
+"""
+
+
+        return f"""Welcome, you are now in the interactive phase, where you can interact with the grid using the available actions.
+During the interactive phase your goal is to act in the environment to understand the underlying rules of the environment. You can reset the environment to it's initial state at any time.
 Understand the environment and the dynamics of the environment well. Once you have understood the environment, you can select 'go-to-test' to go to the test phase.
 After the interactive phase you will be asked to use this knowledge about the environment to answer some questions about it.
 """
