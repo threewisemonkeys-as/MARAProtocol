@@ -118,9 +118,11 @@ def parse_grid(render_output: str):
     return grid, grid_size
 
 
-def render_grid(grid: Dict[str, Any], background_color: str = "black", color_dict: Dict[str, int] = DEFAULT_COLOR_DICT) -> str:
+def render_grid(grid: Dict[str, Any], background_color: str, color_dict: Dict[str, int] = DEFAULT_COLOR_DICT) -> str:
     """
-    Renders the grid into a list of lists of strings.
+    Renders the grid into a list of lists of strings. `background_color` is REQUIRED (pass
+    `interpreter.get_background()`): a silent black default painted N2NTD's white world and
+    balloon's skyblue one black wherever a caller forgot it (bai, 2026-08-23).
 
     Args:
         grid (Dict[str, Any]): The grid dictionary.
@@ -144,7 +146,7 @@ def render_grid(grid: Dict[str, Any], background_color: str = "black", color_dic
     return grid_matrix
 
 
-def render_grid_to_matrix(grid: Dict[str, Any], background_color: str = "black", color_dict: Dict[str, int] = DEFAULT_COLOR_DICT) -> List[List[str]]:
+def render_grid_to_matrix(grid: Dict[str, Any], background_color: str, color_dict: Dict[str, int] = DEFAULT_COLOR_DICT) -> List[List[str]]:
     grid_size = grid.pop("GRID_SIZE", 0)
     grid_matrix = [[background_color for _ in range(grid_size)]
                    for _ in range(grid_size)]
@@ -175,7 +177,7 @@ def check_grid_same(grid1: List[List[str]], grid2: List[List[str]],
 
 
 def render_grid_matplotlib(grid: Dict[str, Any],
-                           output_path: str = None, background_color: str = "black", color_dict: Dict[str, int] = DEFAULT_COLOR_DICT) -> str:
+                           output_path: str = None, *, background_color: str, color_dict: Dict[str, int] = DEFAULT_COLOR_DICT) -> str:
     """
     Renders the grid into a base64 encoded image string using matplotlib.
     Optionally saves the image to a file if output_path is provided.
@@ -309,7 +311,7 @@ def render_grid_matplotlib(grid: Dict[str, Any],
 
 
 def render_string_grid_matplotlib(grid: str,
-                                  output_path: str = None, background_color: str = "black", color_dict: Dict[str, int] = DEFAULT_COLOR_DICT) -> str:
+                                  output_path: str = None, *, background_color: str, color_dict: Dict[str, int] = DEFAULT_COLOR_DICT) -> str:
     """
     Renders a grid structured as a string into a base64 encoded image string using matplotlib.
     Entries marked as "mask" will be displayed as slategrey.

@@ -6,6 +6,7 @@ import random
 import math
 
 import json
+import re
 import yaml
 import time
 import logging
@@ -25,6 +26,17 @@ fh = logging.FileHandler("log_environment_interfaces.txt")
 logger.addHandler(fh)
 
 CURR_DIR = os.path.dirname(os.path.realpath(__file__))
+
+
+_BACKGROUND_DECL = re.compile(r'\(=\s*background\s+"([^"]+)"\s*\)')
+
+
+def program_background(prog: str) -> str:
+    """The background colour a program declares (`(= background "c")`), else the interpreter
+    default "black". For environments that render recorded frames without an interpreter
+    (MFP), this is the value `interpreter.get_background()` would give."""
+    m = _BACKGROUND_DECL.search(prog)
+    return m.group(1) if m else "black"
 
 
 class InteractiveEnvironment:
@@ -477,6 +489,7 @@ class CDSliderEnvironment:
                     render_dict,
                     output_path=
                     f"{self.logging_path}/{self.env_name}/cd/cd_{self.time}.jpeg",
+                    background_color=self.interpreter.get_background(),
                     color_dict=self.color_dict_str_to_int
                 )
                 render_img_bytes = base64.b64decode(render_img_str)
@@ -619,6 +632,7 @@ class PlanningEnvironment:
                 render_dict,
                 output_path=
                 f"{self.logging_path}/{self.env_name}/planning/planning_{self.time}.jpeg",
+                background_color=self.interpreter.get_background(),
                 color_dict=self.color_dict_str_to_int
             )
 
@@ -628,6 +642,7 @@ class PlanningEnvironment:
                 goal_color_grid,
                 output_path=
                 f"{self.logging_path}/{self.env_name}/planning/goal_state_{self.time}.jpeg",
+                background_color=self.interpreter.get_background(),
                 color_dict=self.color_dict_str_to_int
             )
 
@@ -654,6 +669,7 @@ class MARAMFPEnvironment:
                  data_dir=CURR_DIR):
         self.env_name = env_name
         self.prog = open(f"{data_dir}/programs/{env_name}.sexp", "r").read()
+        self.background = program_background(self.prog)
         self.is_terminal = False
         self.is_finished = False
         self.render_mode = render_mode
@@ -767,6 +783,7 @@ You will step through the trajectory one frame at a time. Towards the end of the
                         option,
                         output_path=
                         f"{self.logging_path}/{self.env_name}/mfp/mfp_option_{i}.jpeg",
+                        background_color=self.background,
                         color_dict=self.color_dict_str_to_int
                     ) for i, option in enumerate(choices)
                 ]
@@ -774,6 +791,7 @@ You will step through the trajectory one frame at a time. Towards the end of the
                     color_grid_str,
                     output_path=
                     f"{self.logging_path}/{self.env_name}/mfp/mfp_render_{self.current_time}.jpeg",
+                    background_color=self.background,
                     color_dict=self.color_dict_str_to_int
                 )
 
@@ -819,7 +837,8 @@ You will step through the trajectory one frame at a time. Towards the end of the
                             color_grid,
                             output_path=
                             f"{self.logging_path}/{self.env_name}/mfp/mfp_render_{self.current_time}.jpeg",
-                            color_dict=self.color_dict_str_to_int
+                            background_color=self.background,
+                        color_dict=self.color_dict_str_to_int
                         ))
                 return env_pb2.Observation(
                     text_data=
